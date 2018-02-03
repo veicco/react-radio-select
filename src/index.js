@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
+import "./style.scss";
 
 class RadioSelect extends React.Component {
   constructor(props) {

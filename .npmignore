@@ -1,0 +1,8 @@
+.*.swp
+._*
+.DS_Store
+.git
+.hg
+.wafpickle-*
+npm-debug.log
+.idea/

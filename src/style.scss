@@ -1,0 +1,48 @@
+@mixin visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px; width: 1px;
+  margin: -1px; padding: 0; border: 0;
+}
+
+.radio-select {
+
+  position: relative;
+  display: inline-block;
+  -moz-box-sizing : border-box;
+  box-sizing : border-box;
+  width: 100%;
+
+  .value {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  &.focused .value {
+
+  }
+
+  .option-list {
+    input[type="radio"] {
+      @include visually-hidden;
+    }
+
+    &.collapsed {
+      @include visually-hidden;
+    }
+
+    .option {
+
+      &:hover {
+      }
+
+    }
+
+    // applied to .option next to the focused radio input
+    input[type="radio"]:focus + label > .option {
+    }
+  }
+
+}
