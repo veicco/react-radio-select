@@ -120,7 +120,7 @@ class RadioSelect extends React.Component {
               <label htmlFor={name + key}
                      onClick={() => this.handleClick()}
                      onMouseEnter={() => this.handleMouseEnter(key)}>
-                <div className={`option ${highlightedOption === key ? 'highlight' : ''} ${selectedOption === key ? 'selected' : ''}`}>
+                <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
                   {option.component}
                 </div>
               </label>
