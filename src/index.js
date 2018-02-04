@@ -96,10 +96,10 @@ class RadioSelect extends React.Component {
   }
 
   render() {
-    const { name, options, required, defaultOption, onChange, onFocus, onBlur, ...otherProps } = this.props;
+    const { name, options, required, defaultOption, onChange, onFocus, onBlur, className, ...otherProps } = this.props;
     const { collapsed, selectedOption, highlightedOption, focused } = this.state;
     return (
-      <div {...otherProps} ref={node => this.radioSelect = node} className={`radio-select ${focused ? 'focused' : ''}`}>
+      <div {...otherProps} ref={node => this.radioSelect = node} className={`radio-select ${focused ? 'focused ' : ' '}${className ? className : ''}`}>
         <div onClick={() => this.handleClickValue()} className="value">{options[selectedOption].component}</div>
         <div className={`option-list ${collapsed ? 'collapsed' : ''}`}>
           {options.map((option, key) => (
