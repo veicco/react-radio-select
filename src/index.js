@@ -26,12 +26,28 @@ class RadioSelect extends React.Component {
   }
 
   // event handlers
-  handleBlur() {
-    this.setState({focused: false});
+  handleBlur(e) {
+    if (e.relatedTarget) {
+      if (e.relatedTarget.name && e.relatedTarget.name === this.props.name) return;
+      this.setState({focused: false});
+      this.collapse();
+      if (this.props.onBlur) this.props.onBlur();
+    }
   }
 
   handleChange(index) {
     this.setState({selectedOption: index});
+  }
+
+  handleClick() {
+    this.collapse();
+  }
+
+  handleClickDocument(e) {
+    if (!this.radioSelect.contains(e.target)) {
+      this.collapse();
+      this.setState({focused: false});
+    }
   }
 
   handleClickValue() {
@@ -39,21 +55,29 @@ class RadioSelect extends React.Component {
     this.toggle();
   }
 
-  handleClickDocument(e) {
-    if (this.optionList.contains(e.target)) {
-      //this.collapse();
-    }
-  }
-
   handleFocus() {
     this.setState({focused: true});
+    if (this.props.onFocus) this.props.onFocus();
   }
 
   handleKeyDown(e) {
     const key = e.keyCode;
+    const { selectedOption } = this.state;
     switch (key) {
       case 13: // enter
         this.toggle();
+        break;
+      case 27: // esc
+        this.collapse();
+        break;
+      case 32: // space
+        this.expand();
+        break;
+      case 38: // up
+        if (selectedOption === 0) e.preventDefault();
+        break;
+      case 40: // down
+        if (selectedOption === this.props.options.length - 1) e.preventDefault();
         break;
       default:
         return;
@@ -68,9 +92,9 @@ class RadioSelect extends React.Component {
     const { options, name } = this.props;
     const { collapsed, selectedOption, focused } = this.state;
     return (
-      <div className={`radio-select ${focused ? 'focused' : ''}`}>
+      <div ref={node => this.radioSelect = node} className={`radio-select ${focused ? 'focused' : ''}`}>
         <div onClick={() => this.handleClickValue()} className="value">{options[selectedOption].component}</div>
-        <div ref={node => this.optionList = node} className={`option-list ${collapsed ? 'collapsed' : ''}`}>
+        <div className={`option-list ${collapsed ? 'collapsed' : ''}`}>
           {options.map((option, key) => (
             <Fragment key={key}>
               <input
@@ -79,12 +103,12 @@ class RadioSelect extends React.Component {
                 name={name}
                 id={name + key}
                 value={option.value}
-                onBlur={() => this.handleBlur()}
+                onBlur={e => this.handleBlur(e)}
                 onChange={() => this.handleChange(key)}
                 onFocus={() => this.handleFocus()}
                 onKeyDown={e => this.handleKeyDown(e)}
               />
-              <label htmlFor={name + key}>
+              <label htmlFor={name + key} onClick={() => this.handleClick()}>
                 <div className="option">
                   {option.component}
                 </div>
