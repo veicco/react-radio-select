@@ -6,3 +6,4 @@
 .wafpickle-*
 npm-debug.log
 .idea/
+*.log
