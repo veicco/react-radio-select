@@ -2,13 +2,14 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import "./style.scss";
 
+
 class RadioSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       collapsed: true,
-      selectedOption: 0,
-      highlightedOption: 0,
+      selectedOption: props.defaultOption,
+      highlightedOption: props.defaultOption,
       focused: false
     }
   }
@@ -32,12 +33,13 @@ class RadioSelect extends React.Component {
       if (e.relatedTarget.name && e.relatedTarget.name === this.props.name) return;
       this.setState({focused: false});
       this.collapse();
-      if (this.props.onBlur) this.props.onBlur();
+      if (this.props.onBlur) this.props.onBlur(e);
     }
   }
 
-  handleChange(index) {
+  handleChange(e, index) {
     this.setState({selectedOption: index, highlightedOption: index});
+    if (this.props.onChange) this.props.onChange(e, {index});
   }
 
   handleClick() {
@@ -56,9 +58,9 @@ class RadioSelect extends React.Component {
     this.toggle();
   }
 
-  handleFocus() {
+  handleFocus(e) {
     this.setState({focused: true});
-    if (this.props.onFocus) this.props.onFocus();
+    if (this.props.onFocus) this.props.onFocus(e);
   }
 
   handleKeyDown(e) {
@@ -94,10 +96,10 @@ class RadioSelect extends React.Component {
   }
 
   render() {
-    const { options, name } = this.props;
+    const { name, options, required, defaultOption, onChange, onFocus, onBlur, ...otherProps } = this.props;
     const { collapsed, selectedOption, highlightedOption, focused } = this.state;
     return (
-      <div ref={node => this.radioSelect = node} className={`radio-select ${focused ? 'focused' : ''}`}>
+      <div {...otherProps} ref={node => this.radioSelect = node} className={`radio-select ${focused ? 'focused' : ''}`}>
         <div onClick={() => this.handleClickValue()} className="value">{options[selectedOption].component}</div>
         <div className={`option-list ${collapsed ? 'collapsed' : ''}`}>
           {options.map((option, key) => (
@@ -105,18 +107,20 @@ class RadioSelect extends React.Component {
               <input
                 ref={radio => this[name + key] = radio}
                 type="radio"
+                required={required}
+                checked={selectedOption === key}
                 name={name}
                 id={name + key}
                 value={option.value}
                 onBlur={e => this.handleBlur(e)}
-                onChange={() => this.handleChange(key)}
-                onFocus={() => this.handleFocus()}
+                onChange={(e) => this.handleChange(e, key)}
+                onFocus={(e) => this.handleFocus(e)}
                 onKeyDown={e => this.handleKeyDown(e)}
               />
               <label htmlFor={name + key}
                      onClick={() => this.handleClick()}
                      onMouseEnter={() => this.handleMouseEnter(key)}>
-                <div className={`option ${highlightedOption === key ? 'highlight' : ''}`}>
+                <div className={`option ${highlightedOption === key ? 'highlight' : ''} ${selectedOption === key ? 'selected' : ''}`}>
                   {option.component}
                 </div>
               </label>
@@ -138,13 +142,18 @@ RadioSelect.propTypes = {
       component: PropTypes.node.isRequired
     })
   ).isRequired,
-  required: PropTypes.bool,
-  defaultIndex: PropTypes.number, // index of the default option
+  required: PropTypes.bool.isRequired,
+  defaultOption: PropTypes.number.isRequired,
+
   /* optional event handlers, called after internal handlers */
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func
 };
 
+RadioSelect.defaultProps = {
+  required: false,
+  defaultOption: 0
+}
 
 export default RadioSelect;
