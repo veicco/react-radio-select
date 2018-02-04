@@ -1,3 +1,10 @@
+$border-color: #dddddd;
+$border-color-focus: #0ca3ff;
+$background-color: #ffffff;
+$highlight-color: #ffffff;
+$highlight-background-color: #0ca3ff;
+
+
 @mixin visually-hidden {
   position: absolute;
   overflow: hidden;
@@ -7,24 +14,34 @@
 }
 
 .radio-select {
-
   position: relative;
   display: inline-block;
   -moz-box-sizing : border-box;
   box-sizing : border-box;
   width: 100%;
+  border: 1px solid $border-color;
+  background: #fff;
 
   .value {
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
+    border: 1px solid $border-color;
   }
 
   &.focused .value {
-
+    border-color: $border-color-focus;
   }
 
   .option-list {
+    position: absolute;
+    z-index: 2;
+    min-width: 100%;
+    top: 100%;
+    left: 0;
+    border: 1px solid $border-color;
+    background: #fff;
+
     input[type="radio"] {
       @include visually-hidden;
     }
@@ -34,14 +51,28 @@
     }
 
     .option {
+      border-bottom: 1px solid $border-color;
+
+      &.highlight {
+        background-color: $highlight-background-color;
+        color: $highlight-color;
+      }
 
       &:hover {
+        //background-color: $hover-background-color;
+        //color: $hover-color;
       }
 
     }
 
     // applied to .option next to the focused radio input
     input[type="radio"]:focus + label > .option {
+
+    }
+
+    // applied to .option next to the active radio input
+    input[type="radio"]:active + label > .option {
+
     }
   }
 

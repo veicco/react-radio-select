@@ -8,13 +8,14 @@ class RadioSelect extends React.Component {
     this.state = {
       collapsed: true,
       selectedOption: 0,
+      highlightedOption: 0,
       focused: false
     }
   }
 
   // actions
   collapse() {
-    this.setState({collapsed: true});
+    this.setState({collapsed: true, highlightedOption: this.state.selectedOption});
   }
 
   expand() {
@@ -36,7 +37,7 @@ class RadioSelect extends React.Component {
   }
 
   handleChange(index) {
-    this.setState({selectedOption: index});
+    this.setState({selectedOption: index, highlightedOption: index});
   }
 
   handleClick() {
@@ -84,13 +85,17 @@ class RadioSelect extends React.Component {
     }
   }
 
+  handleMouseEnter(index) {
+    this.setState({highlightedOption: index});
+  }
+
   componentDidMount() {
     document.addEventListener("click", e => this.handleClickDocument(e));
   }
 
   render() {
     const { options, name } = this.props;
-    const { collapsed, selectedOption, focused } = this.state;
+    const { collapsed, selectedOption, highlightedOption, focused } = this.state;
     return (
       <div ref={node => this.radioSelect = node} className={`radio-select ${focused ? 'focused' : ''}`}>
         <div onClick={() => this.handleClickValue()} className="value">{options[selectedOption].component}</div>
@@ -108,8 +113,10 @@ class RadioSelect extends React.Component {
                 onFocus={() => this.handleFocus()}
                 onKeyDown={e => this.handleKeyDown(e)}
               />
-              <label htmlFor={name + key} onClick={() => this.handleClick()}>
-                <div className="option">
+              <label htmlFor={name + key}
+                     onClick={() => this.handleClick()}
+                     onMouseEnter={() => this.handleMouseEnter(key)}>
+                <div className={`option ${highlightedOption === key ? 'highlight' : ''}`}>
                   {option.component}
                 </div>
               </label>
