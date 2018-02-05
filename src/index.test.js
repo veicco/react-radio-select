@@ -1,6 +1,6 @@
 import React from "react";
 import { expect } from "chai"
-import { mount } from "enzyme";
+import { shallow } from "enzyme";
 import sinon from "sinon";
 import RadioSelect from "./index";
 
@@ -32,7 +32,7 @@ describe("RadioSelect", () => {
   let wrapper;
   let clock;
 
-  wrapper = mount(
+  wrapper = shallow(
     <RadioSelect
       options={options}
       name={name}
@@ -47,7 +47,7 @@ describe("RadioSelect", () => {
   describe("events", () => {
     beforeEach(() => {
       clock = sinon.useFakeTimers();
-      wrapper = mount(
+      wrapper = shallow(
         <RadioSelect
           options={options}
           name={name}
@@ -61,7 +61,7 @@ describe("RadioSelect", () => {
     })
 
 
-    it("focusing an input adds class 'focused' to the container div" , () => {
+    it("focusing an input adds class 'focused'" , () => {
       expect(wrapper.find('.radio-select').hasClass('focused')).to.equal(false);
       wrapper.find("input").first().simulate("focus");
       expect(wrapper.find('.radio-select').hasClass('focused')).to.equal(true);
@@ -75,21 +75,21 @@ describe("RadioSelect", () => {
       expect(wrapper.find('.option-list').hasClass('collapsed')).to.equal(true);
     })
 
-    it("pressing space removes class collapsed", () => {
+    it("pressing space removes class 'collapsed'", () => {
       expect(wrapper.find('.option-list').hasClass('collapsed')).to.equal(true);
       wrapper.find("input").first().simulate("keydown", {keyCode: 32});
       expect(wrapper.find('.option-list').hasClass('collapsed')).to.equal(false);
     })
 
-    it("pressing esc adds class collapsed", () => {
-
-      wrapper.find("input").first().simulate("keydown", {keyCode: 13});
-      
-
+    it("pressing esc adds class 'collapsed'", () => {
+      wrapper.instance().expand();
+      wrapper.update();
       expect(wrapper.find('.option-list').hasClass('collapsed')).to.equal(false);
       wrapper.find("input").first().simulate("keydown", {keyCode: 27});
       expect(wrapper.find('.option-list').hasClass('collapsed')).to.equal(true);
     })
+
+    it("click on value adds class 'focused") // TODO: enzyme doesn't allow to use refs (in 'handleClickValue')
 
   })
 });
