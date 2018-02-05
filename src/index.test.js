@@ -1,6 +1,6 @@
 import React from "react";
 import { expect } from "chai"
-import { shallow } from "enzyme";
+import { mount } from "enzyme";
 import sinon from "sinon";
 import RadioSelect from "./index";
 
@@ -29,14 +29,15 @@ describe("RadioSelect", () => {
     },
   ]
   const name = "test-radio-select";
+  const defaultOption = 2;
   let wrapper;
   let clock;
 
-  wrapper = shallow(
+  wrapper = mount(
     <RadioSelect
       options={options}
       name={name}
-      defaultOption={0}
+      defaultOption={defaultOption}
       required={true}/>
   );
 
@@ -47,11 +48,11 @@ describe("RadioSelect", () => {
   describe("events", () => {
     beforeEach(() => {
       clock = sinon.useFakeTimers();
-      wrapper = shallow(
+      wrapper = mount(
         <RadioSelect
           options={options}
           name={name}
-          defaultOption={0}
+          defaultOption={defaultOption}
           required={true}/>
       );
     })

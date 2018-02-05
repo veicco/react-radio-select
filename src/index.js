@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import "./style.scss";
 
+/* helper that compares two string arrays. returns true, if they are equal. */
+const isEqual = (array1, array2) => array1.join('') === array2.join('');
 
 class RadioSelect extends React.Component {
   constructor(props) {
@@ -19,6 +20,13 @@ class RadioSelect extends React.Component {
     this.setState({collapsed: true, highlightedOption: this.state.selectedOption});
   }
 
+  dispatchChangeEvent(index) {
+    const event = document.createEvent("HTMLEvents");
+    event.initEvent("change", true, true);
+    this[this.props.name + index].dispatchEvent(event);
+    if (this.props.onChange) this.props.onChange(event, {index});
+  }
+
   expand() {
     this.setState({collapsed: false});
   }
@@ -29,12 +37,8 @@ class RadioSelect extends React.Component {
 
   // event handlers
   handleBlur(e) {
-    if (e.relatedTarget) {
-      if (e.relatedTarget.name && e.relatedTarget.name === this.props.name) return;
-      this.setState({focused: false});
-      this.collapse();
-      if (this.props.onBlur) this.props.onBlur(e);
-    }
+    this.setState({focused: false});
+    if (this.props.onBlur) this.props.onBlur(e);
   }
 
   handleChange(e, index) {
@@ -47,14 +51,15 @@ class RadioSelect extends React.Component {
   }
 
   handleClickDocument(e) {
-    if (!this.radioSelect.contains(e.target)) {
+    if (this.radioSelect && !this.radioSelect.contains(e.target)) {
       this.collapse();
-      this.setState({focused: false});
     }
   }
 
   handleClickValue() {
-    this[this.props.name + this.state.selectedOption].focus();
+    if (!this.state.focused) {
+      this[this.props.name + this.state.selectedOption].focus();
+    }
     this.toggle();
   }
 
@@ -67,9 +72,14 @@ class RadioSelect extends React.Component {
     const key = e.keyCode;
     const { selectedOption } = this.state;
     switch (key) {
-      case 13: // enter
+      case 9: // tab
+        this.collapse();
+        break;
+      case 13: { // enter
+        e.preventDefault();
         this.toggle();
         break;
+      }
       case 27: // esc
         this.collapse();
         break;
@@ -87,12 +97,34 @@ class RadioSelect extends React.Component {
     }
   }
 
+  handleMouseDown(e) {
+    // prevent blur
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   handleMouseEnter(index) {
     this.setState({highlightedOption: index});
   }
 
   componentDidMount() {
     document.addEventListener("click", e => this.handleClickDocument(e));
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("click", e => this.handleClickDocument(e));
+  }
+
+  componentDidUpdate(prevProps) {
+    /* dispatch change event when option list changes */
+    if (!isEqual(this.props.options.map(option => option.value), prevProps.options.map(option => option.value))) {
+      document.querySelectorAll(`input[name=${this.props.name}]`).forEach((input, index) => {
+        if (input.checked) {
+          this.setState({selectedOption: index});
+          this.dispatchChangeEvent(index);
+        }
+      });
+    }
   }
 
   render() {
@@ -119,6 +151,7 @@ class RadioSelect extends React.Component {
               />
               <label htmlFor={name + key}
                      onClick={() => this.handleClick()}
+                     onMouseDown={e => this.handleMouseDown(e)}
                      onMouseEnter={() => this.handleMouseEnter(key)}>
                 <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
                   {option.component}
@@ -154,6 +187,6 @@ RadioSelect.propTypes = {
 RadioSelect.defaultProps = {
   required: false,
   defaultOption: 0
-}
+};
 
 export default RadioSelect;
