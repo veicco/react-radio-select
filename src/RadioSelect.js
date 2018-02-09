@@ -104,12 +104,13 @@ class RadioSelect extends React.Component {
   componentDidUpdate(prevProps) {
     /* dispatch change event when option list changes */
     if (!isEqual(this.props.options.map(option => option.value), prevProps.options.map(option => option.value))) {
-      document.querySelectorAll(`input[name=${this.props.name}]`).forEach((input, index) => { // todo: forEach => for loop
-        if (input.checked) {
-          this.props.actions.selectOption(index);
-          this.dispatchChangeEvent(index);
+      const inputs = document.querySelectorAll(`input[name=${this.props.name}]`);
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].checked) {
+          this.props.actions.selectOption(i);
+          this.dispatchChangeEvent(i);
         }
-      });
+      }
     }
   }
 
