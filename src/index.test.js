@@ -90,7 +90,7 @@ describe("RadioSelect", () => {
       expect(wrapper.find('.option-list').hasClass('collapsed')).to.equal(true);
     })
 
-    it("click on value adds class 'focused") // TODO: enzyme doesn't allow to use refs (in 'handleClickValue')
+    it("click on value adds class 'focused") // TODO: enzyme doesn't allow to use refs (in 'handleClickWidget')
 
   })
 });

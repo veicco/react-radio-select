@@ -18,48 +18,50 @@ class RadioSelect extends React.Component {
   }
 
   // event handlers
-  handleBlur(e) {
+  handleBlurInput(e, index) {
+    console.log("BLUR INPUT", index);
     this.props.actions.blur();
     if (this.props.onBlur) this.props.onBlur(e);
   }
 
-  handleChange(e, index) {
+  handleChangeInput(e, index) {
+    console.log("CHANGE INPUT", index);
     this.props.actions.selectOption(index);
     this.props.actions.highlightOption(index);
     if (this.props.onChange) this.props.onChange(e, {index});
   }
 
-  handleClick() {
-    this.props.actions.collapse();
+  handleClickInput(e, index) {
+    console.log("CLICK INPUT", index);
   }
 
-  handleClickDocument(e) {
-    if (this.radioSelect && !this.radioSelect.contains(e.target)) {
-      this.props.actions.collapse();
-    }
+  handleClickLabel(e, index) {
+    console.log("CLICK LABEL", index);
   }
 
-  handleClickValue() {
+  handleClickWidget() {
+    console.log("CLICK WIDGET");
     if (!this.props.focused) {
       this[this.props.name + this.props.selectedOption].focus();
     }
     this.props.actions.toggle();
   }
 
-  handleFocus(e) {
+  handleFocusInput(e, index) {
+    console.log("FOCUS INPUT", index);
     this.props.actions.focus();
     if (this.props.onFocus) this.props.onFocus(e);
   }
 
-  handleKeyDown(e) {
+  handleKeyDownInput(e) {
     const key = e.keyCode;
-    const { selectedOption } = this.props;
+    console.log("KEY DOWN INPUT", key);
+    const {selectedOption} = this.props;
     switch (key) {
       case 9: // tab
-        this.props.actions.collapse();
         break;
       case 13: { // enter
-        e.preventDefault();
+        e.preventDefault(); // prevent submitting form
         this.props.actions.toggle();
         break;
       }
@@ -80,22 +82,9 @@ class RadioSelect extends React.Component {
     }
   }
 
-  handleMouseDown(e) {
-    // prevent blur
-    e.preventDefault();
-    e.stopPropagation();
-  }
-
-  handleMouseEnter(index) {
+  handleMouseEnterLabel(e, index) {
+    console.log("MOUSE ENTER LABEL", index);
     this.props.actions.highlightOption(index);
-  }
-
-  componentDidMount() {
-    document.addEventListener("click", e => this.handleClickDocument(e));
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("click", e => this.handleClickDocument(e));
   }
 
   componentDidUpdate(prevProps) {
@@ -114,8 +103,11 @@ class RadioSelect extends React.Component {
     const { name, options, required, defaultOption, onChange, onFocus, onBlur, className, ...otherProps } = this.props.ownProps;
     const { collapsed, selectedOption, highlightedOption, focused } = this.props;
     return (
-      <div {...otherProps} ref={node => this.radioSelect = node} className={`radio-select ${focused ? 'focused ' : ' '}${className ? className : ''}`}>
-        <div onClick={() => this.handleClickValue()} className="value">{options[selectedOption].component}</div>
+      <div {...otherProps}
+           ref={node => this.radioSelect = node}
+           className={`radio-select ${focused ? 'focused ' : ' '}${className ? className : ''}`}
+           onClick={() => this.handleClickWidget()}>
+        <div className="value">{options[selectedOption].component}</div>
         <div className={`option-list ${collapsed ? 'collapsed' : ''}`}>
           {options.map((option, key) => (
             <div key={key}>
@@ -127,15 +119,15 @@ class RadioSelect extends React.Component {
                 name={name}
                 id={name + key}
                 value={option.value}
-                onBlur={e => this.handleBlur(e)}
-                onChange={(e) => this.handleChange(e, key)}
-                onFocus={(e) => this.handleFocus(e)}
-                onKeyDown={e => this.handleKeyDown(e)}
+                onClick={e => this.handleClickInput(e, key)}
+                onBlur={e => this.handleBlurInput(e, key)}
+                onChange={e => this.handleChangeInput(e, key)}
+                onFocus={e => this.handleFocusInput(e, key)}
+                onKeyDown={e => this.handleKeyDownInput(e)}
               />
               <label htmlFor={name + key}
-                     onClick={() => this.handleClick()}
-                     onMouseDown={e => this.handleMouseDown(e)}
-                     onMouseEnter={() => this.handleMouseEnter(key)}>
+                     onClick={e => this.handleClickLabel(e, key)}
+                     onMouseEnter={e => this.handleMouseEnterLabel(e, key)}>
                 <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
                   {option.component}
                 </div>
@@ -168,7 +160,7 @@ RadioSelect.propTypes = {
   highlightedOption: PropTypes.number.isRequired,
   focused: PropTypes.bool.isRequired,
 
-  // map dispatch to props
+  // dispatch to props
   actions: PropTypes.shape({
     expand: PropTypes.func.isRequired,
     collapse: PropTypes.func.isRequired,
