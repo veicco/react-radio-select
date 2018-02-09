@@ -7,7 +7,7 @@ import reducer from "./reducers";
 
 let middlewares = [];
 if (process.env.NODE_ENV !== 'production') {
-  const loggerMiddleware = createLogger();
+  const loggerMiddleware = createLogger({collapsed: true});
   middlewares = [...middlewares, loggerMiddleware];
 }
 

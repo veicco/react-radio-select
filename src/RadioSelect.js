@@ -17,49 +17,54 @@ class RadioSelect extends React.Component {
     if (this.props.onChange) this.props.onChange(event, {index});
   }
 
+  focusInput(index) {
+    this[this.props.name + index].focus();
+  }
+
   // event handlers
-  handleBlurInput(e, index) {
-    console.log("BLUR INPUT", index);
-    this.props.actions.blur();
-    if (this.props.onBlur) this.props.onBlur(e);
-  }
-
-  handleChangeInput(e, index) {
-    console.log("CHANGE INPUT", index);
-    this.props.actions.selectOption(index);
-    this.props.actions.highlightOption(index);
-    if (this.props.onChange) this.props.onChange(e, {index});
-  }
-
-  handleClickInput(e, index) {
-    console.log("CLICK INPUT", index);
+  handleMouseDownLabel(e, index) {
+    this.props.actions.selectNextOption(index);
   }
 
   handleClickLabel(e, index) {
-    console.log("CLICK LABEL", index);
+    this.props.actions.collapse();
   }
 
-  handleClickWidget() {
-    console.log("CLICK WIDGET");
-    if (!this.props.focused) {
-      this[this.props.name + this.props.selectedOption].focus();
+  handleBlurInput(e, index) {
+    if (this.props.nextOption === -1) {
+      this.props.actions.blur();
+      if (this.props.onBlur) this.props.onBlur(e);
+      this.props.actions.collapse();
     }
-    this.props.actions.toggle();
   }
 
   handleFocusInput(e, index) {
-    console.log("FOCUS INPUT", index);
-    this.props.actions.focus();
-    if (this.props.onFocus) this.props.onFocus(e);
+    if (!this.props.focused) {
+      this.props.actions.focus();
+      if (this.props.onFocus) this.props.onFocus(e);
+    }
+  }
+
+  handleChangeInput(e, index) {
+    this.props.actions.selectOption(index);
+    if (this.props.onChange) this.props.onChange(e, {index});
+  }
+
+  handleMouseDownValue(e) {
+    this.props.actions.selectNextOption(this.props.selectedOption); // prevents blur
+  }
+
+  handleClickValue(e) {
+    if (!this.props.focused) this.focusInput(this.props.selectedOption);
+    this.props.actions.selectOption(this.props.selectedOption); // resets nextOption to allow blur again
+    this.focusInput(this.props.selectedOption);
+    this.props.actions.toggle();
   }
 
   handleKeyDownInput(e) {
     const key = e.keyCode;
-    console.log("KEY DOWN INPUT", key);
     const {selectedOption} = this.props;
     switch (key) {
-      case 9: // tab
-        break;
       case 13: { // enter
         e.preventDefault(); // prevent submitting form
         this.props.actions.toggle();
@@ -71,19 +76,28 @@ class RadioSelect extends React.Component {
       case 32: // space
         this.props.actions.expand();
         break;
-      case 38: // up
-        if (selectedOption === 0) e.preventDefault();
+      case 38: { // up
+        if (selectedOption === 0) {
+          e.preventDefault()
+        } else {
+          this.props.actions.selectNextOption(this.props.selectedOption - 1);
+        }
         break;
-      case 40: // down
-        if (selectedOption === this.props.options.length - 1) e.preventDefault();
+      }
+      case 40: { // down
+        if (selectedOption === this.props.options.length - 1) {
+          e.preventDefault();
+        } else {
+        this.props.actions.selectNextOption(this.props.selectedOption + 1);
+        }
         break;
+      }
       default:
         return;
     }
   }
 
   handleMouseEnterLabel(e, index) {
-    console.log("MOUSE ENTER LABEL", index);
     this.props.actions.highlightOption(index);
   }
 
@@ -106,8 +120,13 @@ class RadioSelect extends React.Component {
       <div {...otherProps}
            ref={node => this.radioSelect = node}
            className={`radio-select ${focused ? 'focused ' : ' '}${className ? className : ''}`}
-           onClick={() => this.handleClickWidget()}>
-        <div className="value">{options[selectedOption].component}</div>
+        >
+        <div className="value"
+             onMouseDown={e => this.handleMouseDownValue(e)}
+             onClick={e => this.handleClickValue(e)}
+        >
+          {options[selectedOption].component}
+        </div>
         <div className={`option-list ${collapsed ? 'collapsed' : ''}`}>
           {options.map((option, key) => (
             <div key={key}>
@@ -119,13 +138,13 @@ class RadioSelect extends React.Component {
                 name={name}
                 id={name + key}
                 value={option.value}
-                onClick={e => this.handleClickInput(e, key)}
                 onBlur={e => this.handleBlurInput(e, key)}
                 onChange={e => this.handleChangeInput(e, key)}
                 onFocus={e => this.handleFocusInput(e, key)}
                 onKeyDown={e => this.handleKeyDownInput(e)}
               />
               <label htmlFor={name + key}
+                     onMouseDown={e => this.handleMouseDownLabel(e, key)}
                      onClick={e => this.handleClickLabel(e, key)}
                      onMouseEnter={e => this.handleMouseEnterLabel(e, key)}>
                 <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
@@ -146,19 +165,21 @@ const mapStateToProps = (state, ownProps) => ({
   focused: state.focused,
   selectedOption: state.selectedOption,
   highlightedOption: state.highlightedOption,
+  nextOption: state.nextOption,
   ownProps
-})
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actions, dispatch)
-})
+});
 
 RadioSelect.propTypes = {
   // state to props
   collapsed: PropTypes.bool.isRequired,
+  focused: PropTypes.bool.isRequired,
   selectedOption: PropTypes.number.isRequired,
   highlightedOption: PropTypes.number.isRequired,
-  focused: PropTypes.bool.isRequired,
+  nextOption: PropTypes.number,
 
   // dispatch to props
   actions: PropTypes.shape({
@@ -168,7 +189,8 @@ RadioSelect.propTypes = {
     focus: PropTypes.func.isRequired,
     blur: PropTypes.func.isRequired,
     highlightOption: PropTypes.func.isRequired,
-    selectOption: PropTypes.func.isRequired
+    selectOption: PropTypes.func.isRequired,
+    selectNextOption: PropTypes.func.isRequired
   }).isRequired,
 
   // own props
