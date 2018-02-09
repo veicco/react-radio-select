@@ -101,6 +101,10 @@ class RadioSelect extends React.Component {
     this.props.actions.highlightOption(index);
   }
 
+  componentDidMount() {
+    this.props.actions.selectOption(this.props.defaultOption);
+  }
+
   componentDidUpdate(prevProps) {
     /* dispatch change event when option list changes */
     if (!isEqual(this.props.options.map(option => option.value), prevProps.options.map(option => option.value))) {
@@ -119,7 +123,6 @@ class RadioSelect extends React.Component {
     const { collapsed, selectedOption, highlightedOption, focused } = this.props;
     return (
       <div {...otherProps}
-           ref={node => this.radioSelect = node}
            className={`radio-select ${focused ? 'focused ' : ' '}${className ? className : ''}`}
         >
         <div className="value"
@@ -162,11 +165,11 @@ class RadioSelect extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  collapsed: state.collapsed,
-  focused: state.focused,
-  selectedOption: state.selectedOption,
-  highlightedOption: state.highlightedOption,
-  nextOption: state.nextOption,
+  collapsed: state.radioSelect[ownProps.name].collapsed,
+  focused: state.radioSelect[ownProps.name].focused,
+  selectedOption: state.radioSelect[ownProps.name].selectedOption,
+  highlightedOption: state.radioSelect[ownProps.name].highlightedOption,
+  nextOption: state.radioSelect[ownProps.name].nextOption,
   ownProps
 });
 

@@ -1,3 +1,5 @@
+import {combineReducers} from "redux";
+
 import {
   EXPAND,
   COLLAPSE,
@@ -9,7 +11,7 @@ import {
   SELECT_NEXT_OPTION
 } from "./actions";
 
-const reducer = (state = {
+const radioSelectReducer = (state = {
   collapsed: true,
   selectedOption: 0,
   highlightedOption: 0,
@@ -64,4 +66,12 @@ const reducer = (state = {
   }
 }
 
-export default reducer;
+
+
+const createReducer = (names) => {
+  let combined = {};
+  names.map(name => combined[name] = radioSelectReducer);
+  return combineReducers(combined);
+}
+
+export default createReducer;
