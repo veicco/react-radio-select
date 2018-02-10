@@ -1,13 +1,13 @@
 
 
-export const EXPAND = "@RadioSelectContainer/EXPAND";
-export const COLLAPSE = "@RadioSelectContainer/COLLAPSE";
-export const TOGGLE = "@RadioSelectContainer/TOGGLE";
-export const FOCUS = "@RadioSelectContainer/FOCUS";
-export const BLUR = "@RadioSelectContainer/BLUR";
-export const HIGHLIGHT_OPTION = "@RadioSelectContainer/HIGHLIGHT_OPTION";
-export const SELECT_OPTION = "@RadioSelectContainer/SELECT_OPTION";
-export const SELECT_NEXT_OPTION = "@RadioSelectContainer/SELECT_NEXT_OPTION";
+export const EXPAND = "@RadioSelectRedux/EXPAND";
+export const COLLAPSE = "@RadioSelectRedux/COLLAPSE";
+export const TOGGLE = "@RadioSelectRedux/TOGGLE";
+export const FOCUS = "@RadioSelectRedux/FOCUS";
+export const BLUR = "@RadioSelectRedux/BLUR";
+export const HIGHLIGHT_OPTION = "@RadioSelectRedux/HIGHLIGHT_OPTION";
+export const SELECT_OPTION = "@RadioSelectRedux/SELECT_OPTION";
+export const SELECT_NEXT_OPTION = "@RadioSelectRedux/SELECT_NEXT_OPTION";
 
 
 export const expand = () => ({

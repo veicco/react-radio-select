@@ -1,14 +1,25 @@
 import React from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import {bindActionCreators} from "multireducer";
-import * as actions from "./actions";
-import {isEqual} from "./utils";
-import RadioSelect from "./RadioSelect";
+import RadioSelect from "./RadioSelectView";
+import {isEqual} from "./utils"
 
 
 class RadioSelectContainer extends React.Component {
 
+  // state actions
+  expand() {}
+  collapse() {}
+  toggle() {}
+  focus() {}
+  blur() {}
+  highlightOption(index) {}
+  selectOption(index) {}
+  selectNextOption(index) {}
+
+  // getters
+  getProps() {}
+  getState() {}
+
+  // internal actions
   dispatchChangeEvent(index) {
     const event = document.createEvent("HTMLEvents");
     event.initEvent("change", true, true);
@@ -22,64 +33,64 @@ class RadioSelectContainer extends React.Component {
 
   // event handlers
   handleMouseDownLabel(e, index) {
-    this.props.actions.selectNextOption(index);
+    this.selectNextOption(index);
   }
 
   handleClickLabel(e, index) {
-    this.props.actions.collapse();
+    this.collapse();
   }
 
   handleBlurInput(e, index) {
-    if (this.props.nextOption === -1) {
-      this.props.actions.blur();
+    if (this.getState().nextOption === -1) {
+      this.blur();
       if (this.props.onBlur) this.props.onBlur(e);
-      this.props.actions.collapse();
+      this.collapse();
     }
   }
 
   handleFocusInput(e, index) {
     if (!this.props.focused) {
-      this.props.actions.focus();
+      this.focus();
       if (this.props.onFocus) this.props.onFocus(e);
     }
   }
 
   handleChangeInput(e, index) {
-    this.props.actions.selectOption(index);
+    this.selectOption(index);
     if (this.props.onChange) this.props.onChange(e, {index});
   }
 
   handleMouseDownValue(e) {
-    this.props.actions.selectNextOption(this.props.selectedOption); // prevents blur
+    this.selectNextOption(this.getState().selectedOption); // prevents blur
   }
 
   handleClickValue(e) {
-    if (!this.props.focused) this.focusInput(this.props.selectedOption);
-    this.props.actions.selectOption(this.props.selectedOption); // resets nextOption to allow blur again
-    this.focusInput(this.props.selectedOption);
-    this.props.actions.toggle();
+    if (!this.props.focused) this.focusInput(this.getState().selectedOption);
+    this.selectOption(this.getState().selectedOption); // resets nextOption to allow blur again
+    this.focusInput(this.getState().selectedOption);
+    this.toggle();
   }
 
   handleKeyDownInput(e) {
     const key = e.keyCode;
-    const {selectedOption} = this.props;
+    const {selectedOption} = this.getState();
     switch (key) {
       case 13: { // enter
         e.preventDefault(); // prevent submitting form
-        this.props.actions.toggle();
+        this.toggle();
         break;
       }
       case 27: // esc
-        this.props.actions.collapse();
+        this.collapse();
         break;
       case 32: // space
-        this.props.actions.expand();
+        this.expand();
         break;
       case 38: { // up
         if (selectedOption === 0) {
           e.preventDefault()
         } else {
-          this.props.actions.selectNextOption(this.props.selectedOption - 1);
+          this.selectNextOption(selectedOption - 1);
         }
         break;
       }
@@ -87,7 +98,7 @@ class RadioSelectContainer extends React.Component {
         if (selectedOption === this.props.options.length - 1) {
           e.preventDefault();
         } else {
-        this.props.actions.selectNextOption(this.props.selectedOption + 1);
+          this.selectNextOption(selectedOption + 1);
         }
         break;
       }
@@ -97,11 +108,11 @@ class RadioSelectContainer extends React.Component {
   }
 
   handleMouseEnterLabel(e, index) {
-    this.props.actions.highlightOption(index);
+    this.highlightOption(index);
   }
 
   componentDidMount() {
-    this.props.actions.selectOption(this.props.defaultOption);
+    this.selectOption(this.props.defaultOption);
   }
 
   componentDidUpdate(prevProps) {
@@ -110,7 +121,7 @@ class RadioSelectContainer extends React.Component {
       const inputs = document.querySelectorAll(`input[name=${this.props.name}]`);
       for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].checked) {
-          this.props.actions.selectOption(i);
+          this.selectOption(i);
           this.dispatchChangeEvent(i);
         }
       }
@@ -118,8 +129,8 @@ class RadioSelectContainer extends React.Component {
   }
 
   render() {
-    const { name, options, required, defaultOption, onChange, onFocus, onBlur, className, ...otherProps } = this.props.ownProps;
-    const { collapsed, selectedOption, highlightedOption, focused } = this.props;
+    const { name, options, required, defaultOption, onChange, onFocus, onBlur, className, ...otherProps } = this.getProps();
+    const { collapsed, selectedOption, highlightedOption, focused } = this.getState();
 
     return <RadioSelect inputRef={(radio, key) => this[name + key] = radio}
                         name={name}
@@ -143,59 +154,4 @@ class RadioSelectContainer extends React.Component {
 
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  collapsed: state.radioSelect[ownProps.name].collapsed,
-  focused: state.radioSelect[ownProps.name].focused,
-  selectedOption: state.radioSelect[ownProps.name].selectedOption,
-  highlightedOption: state.radioSelect[ownProps.name].highlightedOption,
-  nextOption: state.radioSelect[ownProps.name].nextOption,
-  ownProps
-});
-
-const mapDispatchToProps = (dispatch, {as}) => ({
-  actions: bindActionCreators(actions, dispatch, as)
-});
-
-RadioSelectContainer.propTypes = {
-  // state to props
-  collapsed: PropTypes.bool.isRequired,
-  focused: PropTypes.bool.isRequired,
-  selectedOption: PropTypes.number.isRequired,
-  highlightedOption: PropTypes.number.isRequired,
-  nextOption: PropTypes.number,
-
-  // dispatch to props
-  actions: PropTypes.shape({
-    expand: PropTypes.func.isRequired,
-    collapse: PropTypes.func.isRequired,
-    toggle: PropTypes.func.isRequired,
-    focus: PropTypes.func.isRequired,
-    blur: PropTypes.func.isRequired,
-    highlightOption: PropTypes.func.isRequired,
-    selectOption: PropTypes.func.isRequired,
-    selectNextOption: PropTypes.func.isRequired
-  }).isRequired,
-
-  // own props
-  as: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string.isRequired,
-      component: PropTypes.node.isRequired,
-      text: PropTypes.string,
-    })
-  ).isRequired,
-  required: PropTypes.bool.isRequired,
-  defaultOption: PropTypes.number.isRequired,
-  onChange: PropTypes.func,
-  onFocus: PropTypes.func,
-  onBlur: PropTypes.func
-};
-
-RadioSelectContainer.defaultProps = {
-  required: false,
-  defaultOption: 0
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(RadioSelectContainer);
+export default RadioSelectContainer;
