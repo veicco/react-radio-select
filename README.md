@@ -10,6 +10,7 @@ npm install react-radio-select
 
 ## Example
 ### Basic usage
+#### React
 ```js
 import { RadioSelect } from 'react-radio-select'
 
@@ -31,6 +32,16 @@ const options = [
 ]
 
 <RadioSelect name='my-select' options={options} />
+```
+
+#### CSS
+##### Import as sass module
+```sass
+@import '~react-radio-select/react-radio-select.scss';
+```
+##### Or use the compiled css
+```html
+<link rel="stylesheet" href="node_modules/react-radio-select/react-radio-select.css">
 ```
 
 ### Connected to Redux
