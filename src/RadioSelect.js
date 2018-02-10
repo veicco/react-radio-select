@@ -1,75 +1,58 @@
 import React from "react";
 import PropTypes from "prop-types";
+import RadioSelectContainer from "./RadioSelectContainer";
+import {initialState} from "./initialState"
 
 
-const RadioSelect = ({
-                       name,
-                       options,
-                       required,
-                       className,
-                       collapsed,
-                       selectedOption,
-                       highlightedOption,
-                       focused,
-                       inputRef,
-                       handleMouseDownValue,
-                       handleClickValue,
-                       handleBlurInput,
-                       handleChangeInput,
-                       handleFocusInput,
-                       handleKeyDownInput,
-                       handleMouseDownLabel,
-                       handleClickLabel,
-                       handleMouseEnterLabel,
-                       otherProps
-}) => {
-  return (
-    <div {...otherProps}
-         className={`radio-select ${focused ? 'focused ' : ' '}${className ? className : ''}`}
-    >
-      <div className="value"
-           onMouseDown={e => handleMouseDownValue(e)}
-           onClick={e => handleClickValue(e)}
-      >
-        {options[selectedOption].component}
-      </div>
-      <div className={`option-list ${collapsed ? 'collapsed' : ''}`}>
-        {options.map((option, key) => (
-          <div key={key}>
-            <input
-              ref={radio => inputRef(radio, key)}
-              type="radio"
-              required={required}
-              checked={selectedOption === key}
-              name={name}
-              id={name + key}
-              value={option.value}
-              onBlur={e => handleBlurInput(e, key)}
-              onChange={e => handleChangeInput(e, key)}
-              onFocus={e => handleFocusInput(e, key)}
-              onKeyDown={e => handleKeyDownInput(e)}
-            />
-            <label htmlFor={name + key}
-                   onMouseDown={e => handleMouseDownLabel(e, key)}
-                   onClick={e => handleClickLabel(e, key)}
-                   onMouseEnter={e => handleMouseEnterLabel(e, key)}>
-              <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
-                {option.component}
-              </div>
-            </label>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+class RadioSelect extends RadioSelectContainer {
+
+  constructor(props) {
+    super(props);
+    this.state = initialState;
+  }
+
+  // override state actions
+  expand() {
+    this.setState({collapsed: false});
+  }
+  collapse() {
+    this.setState({collapsed: true});
+  }
+  toggle() {
+    this.setState({collapsed: !this.state.collapsed});
+  }
+  focus() {
+    this.setState({focused: true});
+  }
+  blur() {
+    this.setState({focused: false});
+  }
+  highlightOption(index) {
+    this.setState({highlightedOption: index});
+  }
+  selectOption(index) {
+    this.setState({
+      selectedOption: index,
+      highlightedOption: index,
+      nextOption: -1
+    });
+  }
+  selectNextOption(index) {
+    this.setState({
+      nextOption: index
+    });
+  }
+
+  // override state getters
+  getProps() {
+    return this.props;
+  }
+  getState() {
+    return this.state;
+  }
 }
 
 RadioSelect.propTypes = {
-  // state to props
-  collapsed: PropTypes.bool.isRequired,
-  focused: PropTypes.bool.isRequired,
-  selectedOption: PropTypes.number.isRequired,
-  highlightedOption: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -79,21 +62,15 @@ RadioSelect.propTypes = {
     })
   ).isRequired,
   required: PropTypes.bool.isRequired,
-  inputRef: PropTypes.func.isRequired,
-  handleMouseDownValue: PropTypes.func.isRequired,
-  handleClickValue: PropTypes.func.isRequired,
-  handleBlurInput: PropTypes.func.isRequired,
-  handleChangeInput: PropTypes.func.isRequired,
-  handleFocusInput: PropTypes.func.isRequired,
-  handleKeyDownInput: PropTypes.func.isRequired,
-  handleMouseDownLabel: PropTypes.func.isRequired,
-  handleClickLabel: PropTypes.func.isRequired,
-  handleMouseEnterLabel: PropTypes.func.isRequired,
-  otherProps: PropTypes.object
-};
+  defaultOption: PropTypes.number.isRequired,
+  onChange: PropTypes.func,
+  onFocus: PropTypes.func,
+  onBlur: PropTypes.func
+}
 
 RadioSelect.defaultProps = {
-  required: false
+  required: false,
+  defaultOption: 0
 };
 
 export default RadioSelect;

@@ -1,6 +1,6 @@
 import React from "react";
-import RadioSelect from "./redux/RadioSelectContainerRedux";
-import RadioSelectReact from "./RadioSelectContainerReact";
+import RadioSelectRedux from "./redux/RadioSelectRedux";
+import RadioSelect from "./RadioSelect";
 import createReducer from "./redux/reducers";
 
-export {createReducer, RadioSelect, RadioSelectReact};
+export {RadioSelect, RadioSelectRedux, createReducer};

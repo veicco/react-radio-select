@@ -6,7 +6,7 @@ import RadioSelectContainer from "../RadioSelectContainer";
 import * as actions from "./actions"
 
 
-class RadioSelectContainerRedux extends RadioSelectContainer {
+class RadioSelectRedux extends RadioSelectContainer {
 
   // override state actions
   expand() {
@@ -57,7 +57,7 @@ const mapDispatchToProps = (dispatch, {as}) => ({
   actions: bindActionCreators(actions, dispatch, as)
 });
 
-RadioSelectContainerRedux.propTypes = {
+RadioSelectRedux.propTypes = {
   // state to props
   collapsed: PropTypes.bool.isRequired,
   focused: PropTypes.bool.isRequired,
@@ -94,9 +94,9 @@ RadioSelectContainerRedux.propTypes = {
   onBlur: PropTypes.func
 };
 
-RadioSelectContainerRedux.defaultProps = {
+RadioSelectRedux.defaultProps = {
   required: false,
   defaultOption: 0
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RadioSelectContainerRedux);
+export default connect(mapStateToProps, mapDispatchToProps)(RadioSelectRedux);
