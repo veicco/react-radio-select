@@ -85,11 +85,11 @@ const MyForm = () => (
 - options (array of objects): The options in the select widget. Each object shall include properties "value" (string) and "component" (node).
 
 ##### Optional props
-- required (bool):
-- defaultOption (number):
-- onChange (func):
-- onFocus (func):
-- onBlur (func):
+- required (bool): Adds the required attribute to the generated radio inputs. 
+- defaultOption (number): Index of the preselected option. 0 by default.
+- onChange (func): Callback when the value changes.
+- onFocus (func): Callback when the widget receives focus.
+- onBlur (func): Callback when the widget looses focus.
 
 ### `<RadioSelectRedux>`
 
