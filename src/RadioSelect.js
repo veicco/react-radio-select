@@ -3,10 +3,8 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {bindActionCreators} from "multireducer";
 import * as actions from "./actions";
+import {isEqual} from "./utils";
 
-
-/* helper that compares two string arrays. returns true, if they are equal. */
-const isEqual = (array1, array2) => array1.join('') === array2.join('');
 
 class RadioSelect extends React.Component {
 

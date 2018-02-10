@@ -70,7 +70,9 @@ const radioSelectReducer = (state = {
 
 const createReducer = ({as}) => {
   let combined = {};
-  as.map(as => combined[as] = multireducer(radioSelectReducer, as));
+  let identifiers = as;
+  if (typeof as === "string") identifiers = [as];
+  identifiers.map(as => combined[as] = multireducer(radioSelectReducer, as));
   return combineReducers(combined);
 }
 
