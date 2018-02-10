@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+import {bindActionCreators} from "multireducer";
 import * as actions from "./actions";
 
 
@@ -173,8 +173,8 @@ const mapStateToProps = (state, ownProps) => ({
   ownProps
 });
 
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(actions, dispatch)
+const mapDispatchToProps = (dispatch, {as}) => ({
+  actions: bindActionCreators(actions, dispatch, as)
 });
 
 RadioSelect.propTypes = {
@@ -198,6 +198,7 @@ RadioSelect.propTypes = {
   }).isRequired,
 
   // own props
+  as: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({

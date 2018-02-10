@@ -1,4 +1,5 @@
 import {combineReducers} from "redux";
+import multireducer from "multireducer";
 
 import {
   EXPAND,
@@ -67,10 +68,9 @@ const radioSelectReducer = (state = {
 }
 
 
-
-const createReducer = (names) => {
+const createReducer = ({as}) => {
   let combined = {};
-  names.map(name => combined[name] = radioSelectReducer);
+  as.map(as => combined[as] = multireducer(radioSelectReducer, as));
   return combineReducers(combined);
 }
 
