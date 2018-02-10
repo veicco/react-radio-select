@@ -1,5 +1,6 @@
 import {combineReducers} from "redux";
 import multireducer from "multireducer";
+import {initialState} from "../initialState";
 
 import {
   EXPAND,
@@ -12,13 +13,7 @@ import {
   SELECT_NEXT_OPTION
 } from "./actions";
 
-const radioSelectReducer = (state = {
-  collapsed: true,
-  selectedOption: 0,
-  highlightedOption: 0,
-  focused: false,
-  nextOption: -1
-}, action) => {
+const radioSelectReducer = (state = initialState, action) => {
   switch (action.type) {
     case EXPAND:
       return {
