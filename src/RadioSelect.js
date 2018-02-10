@@ -57,8 +57,7 @@ RadioSelect.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string.isRequired,
-      component: PropTypes.node.isRequired,
-      text: PropTypes.string,
+      component: PropTypes.node.isRequired
     })
   ).isRequired,
   required: PropTypes.bool.isRequired,
