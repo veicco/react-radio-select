@@ -129,9 +129,6 @@ const reducer = combineReducers({
 - onFocus (func): Callback when the widget receives focus.
 - onBlur (func): Callback when the widget looses focus.
 
-#### Classes
-TODO
-
 ### `<RadioSelectRedux>`
 
 #### Props
