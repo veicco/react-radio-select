@@ -8,8 +8,8 @@ Accessible dropdown widget for React. Visually the component functions as a nati
 npm install react-radio-select  
 ```
 
-## Example
-### Basic usage
+## How to use
+### Basic example
 #### React
 ```js
 import { RadioSelect } from 'react-radio-select'
@@ -85,7 +85,7 @@ const MyForm = () => (
 - options (array of objects): The options in the select widget. Each object shall include properties "value" (string) and "component" (node).
 
 ##### Optional props
-- required (bool): Adds the required attribute to the generated radio inputs. 
+- required (bool): Adds the "required" attribute to the generated radio inputs. 
 - defaultOption (number): Index of the preselected option. 0 by default.
 - onChange (func): Callback when the value changes.
 - onFocus (func): Callback when the widget receives focus.
