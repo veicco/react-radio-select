@@ -1,11 +1,14 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    'index.js': './src/index.js',
+  },
   output: {
-    filename: 'index.js',
+    filename: '[name]',
     path: path.resolve(__dirname),
     libraryTarget: 'commonjs2'
   },
@@ -26,7 +29,8 @@ module.exports = {
     ],
   },
   plugins: [
-    new ExtractTextPlugin('react-radio-select.css')
+    new ExtractTextPlugin('style.css'),
+    new CopyWebpackPlugin([{from: './src/style.scss', to: 'style.scss'}])
   ],
   externals: {
     'react': 'commonjs react'

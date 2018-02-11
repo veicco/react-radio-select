@@ -2,6 +2,38 @@ import React from "react";
 import PropTypes from "prop-types";
 
 
+const styles = {
+  visuallyHidden: {
+    position: "absolute",
+    oveflow: "hidden",
+    clip: "rect(0 0 0 0)",
+    height: 1,
+    width: 1,
+    margin: -1,
+    padding: 0,
+    border: 0
+  },
+  radioSelect: {
+    position: "relative",
+    display: "inline-block",
+    boxSizing: "border-box",
+    width: "100%"
+  },
+  value: {
+    width: "100%",
+    overflow: "hidden",
+    whiteSpace: "nowrap"
+  },
+  optionList: {
+    position: "absolute",
+    zIndex: 2,
+    minWidth: "100%",
+    top: "100%",
+    left: 0
+  }
+};
+
+
 const RadioSelectView = ({
                        name,
                        options,
@@ -25,6 +57,7 @@ const RadioSelectView = ({
 }) => {
   return (
     <div {...otherProps}
+         style={styles.radioSelect}
          className={`radio-select ${focused ? 'focused ' : ' '}${className ? className : ''}`}
     >
       <div className="value"
@@ -33,10 +66,12 @@ const RadioSelectView = ({
       >
         {options[selectedOption].component}
       </div>
-      <div className={`option-list ${collapsed ? 'collapsed' : ''}`}>
+      <div className={`option-list ${collapsed ? 'collapsed' : ''}`}
+           style={collapsed ? styles.visuallyHidden : styles.optionList}>
         {options.map((option, key) => (
           <div key={key}>
             <input
+              style={styles.visuallyHidden}
               ref={radio => inputRef(radio, key)}
               type="radio"
               required={required}
