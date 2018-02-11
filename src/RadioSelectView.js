@@ -63,6 +63,7 @@ const RadioSelectView = ({
       <div className="value"
            onMouseDown={e => handleMouseDownValue(e)}
            onClick={e => handleClickValue(e)}
+           style={styles.value}
       >
         {options[selectedOption].component}
       </div>
@@ -83,11 +84,13 @@ const RadioSelectView = ({
               onChange={e => handleChangeInput(e, key)}
               onFocus={e => handleFocusInput(e, key)}
               onKeyDown={e => handleKeyDownInput(e)}
+              {...option.inputAttrs}
             />
             <label htmlFor={name + key}
                    onMouseDown={e => handleMouseDownLabel(e, key)}
                    onClick={e => handleClickLabel(e, key)}
-                   onMouseEnter={e => handleMouseEnterLabel(e, key)}>
+                   onMouseEnter={e => handleMouseEnterLabel(e, key)}
+                   {...option.labelAttrs}>
               <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
                 {option.component}
               </div>
@@ -110,7 +113,8 @@ RadioSelectView.propTypes = {
     PropTypes.shape({
       value: PropTypes.string.isRequired,
       component: PropTypes.node.isRequired,
-      text: PropTypes.string,
+      inputAttrs: PropTypes.object,
+      labelAttrs: PropTypes.object,
     })
   ).isRequired,
   required: PropTypes.bool.isRequired,

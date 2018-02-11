@@ -14,29 +14,27 @@ npm install react-radio-select
 #### Step 1: Define the options list
 ```js
 const Option = ({title, price}) => (
-  <div>
+  <div className="coffee-option">
     <div>{title}</div>
     <div>{price}</div>
   </div>
 )
 
-// the options must be an array of objects with keys 
-// "value" (string) and "component" (node)
-const options = [
-  {
-    value: "1001",
-    component: <Option title="Espresso" price="1.50 €"/>
-  },
-  {
-    value: "1002",
-    component: <Option title="Cappuccino" price="2.00 €"/>
-  },
-  {
-    value: "1003",
-    component: <Option title="Flat white" price="2.20 €"/>
-  }
-]
+const coffees = [
+  {id: "1001", title: "Espresso", price: "1.50 €"},
+  {id: "1002", title: "Cappuccino", price: "2.00 €"},
+  {id: "1003", title: "Flat white", price: "2.20 €"},
+  {id: "1004", title: "Americano", price: "1.80 €"},
+];
 
+// The options must be an array of objects with at least keys "value" (string) 
+// and "component" (node). "inputAttrs" (object) and "labelAttrs" (object) may 
+// be included to add additional attributes to the input and label tags.
+const options = coffees.map(item => ({
+    value: item.id,
+    labelAttrs: {"aria-label": item.title + " " + item.price},
+    component: <Option title={item.title} price={item.price}/>
+}));
 ```
 
 #### Step 2: Use `<RadioSelect>` in your app
