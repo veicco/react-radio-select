@@ -10,41 +10,80 @@ npm install react-radio-select
 
 ## How to use
 ### Basic example
-#### React
+
+#### Step 1: Define the options list
+```js
+const Option = ({title, price}) => (
+  <div>
+    <div>{title}</div>
+    <div>{price}</div>
+  </div>
+)
+
+// the options must be an array of objects with keys 
+// "value" (string) and "component" (node)
+const options = [
+  {
+    value: "1001",
+    component: <Option title="Espresso" price="1.50 €"/>
+  },
+  {
+    value: "1002",
+    component: <Option title="Cappuccino" price="2.00 €"/>
+  },
+  {
+    value: "1003",
+    component: <Option title="Flat white" price="2.20 €"/>
+  }
+]
+
+```
+
+#### Step 2: Use `<RadioSelect>` in your app
+
 ```js
 import { RadioSelect } from 'react-radio-select'
 
 ...
 
-const options = [
-  {
-    value: "1201",
-    component: <MyComponent showText="Orange"/>
-  },
-  {
-    value: "1207",
-    component: <MyComponent showText="Apple"/>
-  },
-  {
-    value: "1104",
-    component: <MyComponent showText="Banana"/>
+<form>
+  <fieldset>
+    <legend>Choose coffee</legend>
+    <RadioSelect id="coffee-selection" name="coffee" options={options} />
+  </fieldset>
+</form>
+```
+
+#### Step 3: Define styles for the widget
+
+```scss
+#coffee-selection {
+  .value {
+    border: 1px solid #dddddd;
   }
-]
-
-<RadioSelect name='my-select' options={options} />
+  
+  &.focused .value {
+    border-color: #0ca3ff;
+  }
+  
+  .option-list {
+    border: 1px solid #dddddd;
+  }
+  
+  .option {
+    border-bottom: 1px solid #dddddd;
+    background-color: #ffffff;
+    
+    &.highlight {
+      background-color: #0ca3ff;
+      color: #ffffff;
+    }
+  }
+}
 ```
 
-#### CSS
-##### Import as sass module
-```sass
-@import '~react-radio-select/react-radio-select.scss';
-```
-##### Or use the compiled css
-```html
-<link rel="stylesheet" href="node_modules/react-radio-select/react-radio-select.css">
-```
 
-### Connected to Redux
+### Connecting to Redux
 If you prefer to store the widget's state in Redux `store`, there is another version of the component 
 named `<RadioSelectRedux>`.
 
@@ -53,7 +92,7 @@ import { RadioSelectRedux, createReducer } from 'react-radio-select'
 
 ...
 
-const radioSelectReducer = createReducer({as: ['my-select-1', 'my-select-2']});
+const radioSelectReducer = createReducer({as: ['coffee-1', 'coffee-2']});
 
 const reducer = combineReducers({
   ...otherReducers,
@@ -62,17 +101,16 @@ const reducer = combineReducers({
 
 ...
 
-const MyForm = () => (
-  <form>
-    <RadioSelectRedux as='my-select-1' name='my-select-1' options={options} />
-    <RadioSelectRedux as='my-select-2' name='my-select-2' options={options} />
-  </form>
-)
-
-
-
-
-
+<form>
+  <fieldset>
+    <legend>Choose first coffee</legend>
+    <RadioSelectRedux id="coffee-selection-1" name="coffee-1" options={options} />
+  </fieldset>
+  <fieldset>
+    <legend>Choose second coffee</legend>
+    <RadioSelectRedux id="coffee-selection-2" name="coffee-2" options={options} />
+  </fieldset>
+</form>
 ```
 
 ## API
@@ -90,6 +128,9 @@ const MyForm = () => (
 - onChange (func): Callback when the value changes.
 - onFocus (func): Callback when the widget receives focus.
 - onBlur (func): Callback when the widget looses focus.
+
+#### Classes
+TODO
 
 ### `<RadioSelectRedux>`
 
