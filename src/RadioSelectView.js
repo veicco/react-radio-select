@@ -21,13 +21,11 @@ const styles = {
   },
   value: {
     width: "100%",
-    overflow: "hidden",
-    whiteSpace: "nowrap"
   },
   optionList: {
     position: "absolute",
     zIndex: 2,
-    minWidth: "100%",
+    width: "100%",
     top: "100%",
     left: 0
   }
