@@ -134,6 +134,7 @@ class RadioSelectContainer extends React.Component {
 
     return <RadioSelect inputRef={(radio, key) => this[name + key] = radio}
                         name={name}
+                        className={className}
                         selectedOption={selectedOption}
                         collapsed={collapsed}
                         focused={focused}

@@ -62,6 +62,7 @@ RadioSelect.propTypes = {
   ).isRequired,
   required: PropTypes.bool.isRequired,
   defaultOption: PropTypes.number.isRequired,
+  className: PropTypes.string,
   onChange: PropTypes.func,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func
