@@ -94,37 +94,6 @@ import { RadioSelect } from 'react-radio-select'
 }
 ```
 
-
-### Connecting to Redux
-If you prefer to store the widget's state in Redux `store`, there is another version of the component 
-named `<RadioSelectRedux>`.
-
-```js
-import { RadioSelectRedux, createReducer } from 'react-radio-select'
-
-...
-
-const radioSelectReducer = createReducer({as: ['coffee-1', 'coffee-2']});
-
-const reducer = combineReducers({
-  ...otherReducers,
-  radioSelect: radioSelectReducer // the key must be "radioSelect"
-})
-
-...
-
-<form>
-  <fieldset>
-    <legend>Choose first coffee</legend>
-    <RadioSelectRedux id="coffee-selection-1" name="coffee-1" options={options} />
-  </fieldset>
-  <fieldset>
-    <legend>Choose second coffee</legend>
-    <RadioSelectRedux id="coffee-selection-2" name="coffee-2" options={options} />
-  </fieldset>
-</form>
-```
-
 ## API
 
 ### `<RadioSelect>`
@@ -140,15 +109,3 @@ const reducer = combineReducers({
 - onChange (func): Callback when the value changes.
 - onFocus (func): Callback when the widget receives focus.
 - onBlur (func): Callback when the widget looses focus.
-
-### `<RadioSelectRedux>`
-
-#### Props
-Same rules apply than with `<RadioSelect>`, and additionally:
-
-##### Required props
-- as (string): will be used as the key in the application's state
-
-### `createReducer()`
-#### Arguments
-- as (array of strings): list of 'as'-props, the same as given to the instances of `<RadioSelectRedux>`

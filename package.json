@@ -1,6 +1,6 @@
 {
   "name": "react-radio-select",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Accessible dropdown widget for React. Visually the component functions as a native html select with customizable option elements. Screen readers however treat it as a radio button group in order to persist native form events for the screen readers.",
   "main": "index.js",
   "scripts": {
@@ -42,9 +42,6 @@
     "webpack": "^3.10.0"
   },
   "dependencies": {
-    "multireducer": "^3.1.0",
-    "react": "^16.2.0",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
+    "react": ">16.0.0"
   }
 }
