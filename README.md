@@ -54,7 +54,7 @@ const options = coffees.map(item => ({
 #### Step 2: Use `<RadioSelect>` in your app
 
 ```js
-import { RadioSelect } from 'react-radio-select'
+import RadioSelect from 'react-radio-select'
 
 ...
 
