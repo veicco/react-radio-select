@@ -47,7 +47,7 @@ const coffees = [
 const options = coffees.map(item => ({
     value: item.id,
     component: <Option title={item.title} price={item.price}/>,
-    labelAttrs: {"aria-label": item.title + " " + item.price}
+    ariaLabel: item.title + " " + item.price
 }));
 ```
 
