@@ -69,7 +69,18 @@ const RadioSelectView = ({
            style={collapsed ? styles.visuallyHidden : styles.optionList}>
         {options.map((option, key) => (
           <div key={key}>
+            <span id={name + "Label" + key} style={styles.visuallyHidden}>{option.ariaLabel}</span>
+            <label htmlFor={name + key}
+                   onMouseDown={e => handleMouseDownLabel(e, key)}
+                   onClick={e => handleClickLabel(e, key)}
+                   onMouseEnter={e => handleMouseEnterLabel(e, key)}
+                   {...option.labelAttrs}>
+              <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
+                {option.component}
+              </div>
+            </label>
             <input
+              aria-labelledby={name + "Label" + key}
               style={styles.visuallyHidden}
               ref={radio => inputRef(radio, key)}
               type="radio"
@@ -84,15 +95,6 @@ const RadioSelectView = ({
               onKeyDown={e => handleKeyDownInput(e)}
               {...option.inputAttrs}
             />
-            <label htmlFor={name + key}
-                   onMouseDown={e => handleMouseDownLabel(e, key)}
-                   onClick={e => handleClickLabel(e, key)}
-                   onMouseEnter={e => handleMouseEnterLabel(e, key)}
-                   {...option.labelAttrs}>
-              <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
-                {option.component}
-              </div>
-            </label>
           </div>
         ))}
       </div>
@@ -111,6 +113,7 @@ RadioSelectView.propTypes = {
     PropTypes.shape({
       value: PropTypes.string.isRequired,
       component: PropTypes.node.isRequired,
+      ariaLabel: PropTypes.string.isRequired,
       inputAttrs: PropTypes.object,
       labelAttrs: PropTypes.object,
     })

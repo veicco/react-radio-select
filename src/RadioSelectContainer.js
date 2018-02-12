@@ -56,8 +56,10 @@ class RadioSelectContainer extends React.Component {
   }
 
   handleChangeInput(e, index) {
-    this.selectOption(index);
-    if (this.props.onChange) this.props.onChange(e, {index});
+    setTimeout(() => { // change is fired before blur on IE
+      this.selectOption(index);
+      if (this.props.onChange) this.props.onChange(e, {index});
+    }, 20);
   }
 
   handleMouseDownValue(e) {

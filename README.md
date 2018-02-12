@@ -41,9 +41,9 @@ const coffees = [
   {id: "1004", title: "Americano", price: "1.80 €"},
 ];
 
-// The options must be an array of objects with at least keys "value" (string) 
-// and "component" (node). "inputAttrs" (object) and "labelAttrs" (object) may 
-// be included to add additional attributes to the input and label tags.
+// The options must be an array of objects with at least keys "value" (string), 
+// "component" (node) and "ariaLabel" (string). "inputAttrs" (object) and "labelAttrs" 
+// (object) may be included to add additional attributes to the input and label tags.
 const options = coffees.map(item => ({
     value: item.id,
     component: <Option title={item.title} price={item.price}/>,
@@ -101,11 +101,12 @@ import RadioSelect from 'react-radio-select'
 #### Props
 ##### Required props
 - name (string): The name attribute of the generated radio inputs.
-- options (array of objects): The options in the select widget. Each object shall include properties "value" (string) and "component" (node).
+- options (array of objects): The options in the select widget. Each object shall include properties "value" (string), "component" (node) and "ariaLabel (string).
 
 ##### Optional props
 - required (bool): Adds the "required" attribute to the generated radio inputs. 
 - defaultOption (number): Index of the preselected option. 0 by default.
+- className (string): Additional classes 
 - onChange (func): Callback when the value changes.
 - onFocus (func): Callback when the widget receives focus.
 - onBlur (func): Callback when the widget looses focus.
