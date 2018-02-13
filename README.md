@@ -1,7 +1,6 @@
 # React Radio Select
 
-`<RadioSelect>` is a dropdown widget for React, made of radio buttons. It attempts to imitate html 
-`<select>` with customizable option components, being still accessible for screen reader users.
+`<RadioSelect>` is a customizable alternative for html `<select>` made of radio buttons.
 
 ## Demo
 http://radio-select.veikko.it/
