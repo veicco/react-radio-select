@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import RadioSelectContainer from "./RadioSelectContainer";
 import {initialState} from "./initialState"
-import {log} from "./utils";
 
 
 class RadioSelect extends RadioSelectContainer {
@@ -15,27 +14,21 @@ class RadioSelect extends RadioSelectContainer {
   // override state actions
   expand() {
     this.setState({collapsed: false});
-    log("expand", this.state);
   }
   collapse() {
     this.setState({collapsed: true});
-    log("collapse", this.state);
   }
   toggle() {
     this.setState({collapsed: !this.state.collapsed});
-    log("toggle", this.state);
   }
   focus() {
     this.setState({focused: true});
-    log("focus", this.state);
   }
   blur() {
     this.setState({focused: false});
-    log("blur", this.state);
   }
   highlightOption(index) {
     this.setState({highlightedOption: index});
-    log("highlightOption", this.state);
   }
   selectOption(index) {
     this.setState({
@@ -43,13 +36,11 @@ class RadioSelect extends RadioSelectContainer {
       highlightedOption: index,
       nextOption: -1
     });
-    log("selectOption", this.state);
   }
   selectNextOption(index) {
     this.setState({
       nextOption: index
     });
-    log("selectNextOption", this.state);
   }
 
   // override state getters
