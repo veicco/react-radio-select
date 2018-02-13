@@ -1,18 +1,7 @@
 # React Radio Select
 
-An accessible dropdown widget for React. Visually the widget is like html `<select>`, but with customizable
-option components. For screen readers however it functions as a native radio button group.
-
-The problem with the native `<select>` is its limitation in terms of customization. If we needed to present 
-the `<option>` contents on multiple rows, for example, we could not use `<select>`, but we would have to use
-a customized component. For screen reader users however customized select widgets are usually difficult, as 
-the screen readers do not recognize them as form inputs. Although careful use of aria-attributes could solve 
-the problem, it seems difficult to create a solution that functions correctly for all user groups with all 
-browsers.
-
-`<RadioSelect>` solves the problem by using radio inputs. As these are native form elements, screen readers
-can communicate with them without problems.
-
+`<RadioSelect>` is a dropdown widget for React, made of radio buttons. It attempts to imitate html 
+`<select>` with customizable option components, being still accessible for screen reader users.
 
 ## Demo
 http://radio-select.veikko.it/
