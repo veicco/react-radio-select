@@ -56,10 +56,7 @@ class RadioSelectContainer extends React.Component {
   }
 
   handleChangeInput(e, index) {
-    setTimeout(() => { // change is fired before blur on IE
-      this.selectOption(index);
-      if (this.props.onChange) this.props.onChange(e, {index});
-    }, 20);
+    if (this.props.onChange) this.props.onChange(e, {index});
   }
 
   handleMouseDownValue(e) {
@@ -109,6 +106,10 @@ class RadioSelectContainer extends React.Component {
     }
   }
 
+  handleClickInput(e, index) {
+    this.selectOption(index);
+  }
+
   handleMouseEnterLabel(e, index) {
     this.highlightOption(index);
   }
@@ -149,6 +150,7 @@ class RadioSelectContainer extends React.Component {
                         handleClickValue={(e) => this.handleClickValue(e)}
                         handleFocusInput={(e, key) => this.handleFocusInput(e, key)}
                         handleKeyDownInput={(e) => this.handleKeyDownInput(e)}
+                        handleClickInput={(e, key) => this.handleClickInput(e, key)}
                         handleMouseDownLabel={(e) => this.handleMouseDownLabel(e)}
                         handleMouseDownValue={(e) => this.handleMouseDownValue(e)}
                         handleMouseEnterLabel={(e, key) => this.handleMouseEnterLabel(e, key)}
