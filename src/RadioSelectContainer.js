@@ -33,19 +33,16 @@ class RadioSelectContainer extends React.Component {
 
   // event handlers
   handleMouseDownLabel(e, index) {
-    console.log("handleMouseDownLabel", index);
     this.selectNextOption(index);
   }
 
   handleClickLabel(e, index) {
-    console.log("handleClickLabel", index);
     this.focusInput(index);
     this.selectOption(index);
     this.collapse();
   }
 
   handleBlurInput(e, index) {
-    console.log("handleBlurInput", index);
     if (this.getState().nextOption === -1) {
       this.blur();
       if (this.props.onBlur) this.props.onBlur(e);
@@ -54,7 +51,6 @@ class RadioSelectContainer extends React.Component {
   }
 
   handleFocusInput(e, index) {
-    console.log("handleFocusInput", index);
     if (!this.props.focused) {
       this.focus();
       this.expand();
@@ -63,29 +59,20 @@ class RadioSelectContainer extends React.Component {
   }
 
   handleChangeInput(e, index) {
-    console.log("handleChangeInput", index);
     if (this.props.onChange) this.props.onChange(e, {index});
-    setTimeout(() => { // change is fired before blur on IE
-      this.selectOption(index);
-    }, 20);
   }
 
   handleMouseDownValue(e) {
-    console.log("handleMouseDownValue");
     this.selectNextOption(this.getState().selectedOption); // prevents blur
   }
 
   handleClickValue(e) {
-    console.log("handleClickValue");
     if (!this.props.focused) this.focusInput(this.getState().selectedOption);
     this.selectOption(this.getState().selectedOption); // resets nextOption to allow blur again
     this.focusInput(this.getState().selectedOption);
-    //this.toggle();
-
   }
 
   handleKeyDownInput(e) {
-    console.log("handleKeyDownInput");
     const key = e.keyCode;
     const {selectedOption} = this.getState();
     switch (key) {
@@ -119,6 +106,10 @@ class RadioSelectContainer extends React.Component {
       default:
         return;
     }
+  }
+
+  handleClickInput(e, index) {
+    this.selectOption(index);
   }
 
   handleMouseEnterLabel(e, index) {
@@ -161,6 +152,7 @@ class RadioSelectContainer extends React.Component {
                         handleClickValue={(e) => this.handleClickValue(e)}
                         handleFocusInput={(e, key) => this.handleFocusInput(e, key)}
                         handleKeyDownInput={(e) => this.handleKeyDownInput(e)}
+                        handleClickInput={(e, key) => this.handleClickInput(e, key)}
                         handleMouseDownLabel={(e) => this.handleMouseDownLabel(e)}
                         handleMouseDownValue={(e) => this.handleMouseDownValue(e)}
                         handleMouseEnterLabel={(e, key) => this.handleMouseEnterLabel(e, key)}

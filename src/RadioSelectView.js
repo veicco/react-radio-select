@@ -6,7 +6,7 @@ const styles = {
   visuallyHidden: {
     position: "absolute",
     oveflow: "hidden",
-    clip: "rect(0 0 0 0)",
+    left: -1000 + "rem",
     height: 1,
     margin: -1,
     padding: 0,
@@ -50,6 +50,7 @@ const RadioSelectView = ({
                        handleMouseDownLabel,
                        handleClickLabel,
                        handleMouseEnterLabel,
+                       handleClickInput,
                        otherProps
 }) => {
   return (
@@ -88,7 +89,8 @@ const RadioSelectView = ({
               onBlur={e => handleBlurInput(e, key)}
               onChange={e => handleChangeInput(e, key)}
               onFocus={e => handleFocusInput(e, key)}
-              onKeyDown={e => handleKeyDownInput(e)}
+              onKeyDown={e => handleKeyDownInput(e, key)}
+              onClick={e => handleClickInput(e, key)}
               {...option.inputAttrs}
             />
           </div>
@@ -122,6 +124,7 @@ RadioSelectView.propTypes = {
   handleChangeInput: PropTypes.func.isRequired,
   handleFocusInput: PropTypes.func.isRequired,
   handleKeyDownInput: PropTypes.func.isRequired,
+  handleClickInput: PropTypes.func.isRequired,
   handleMouseDownLabel: PropTypes.func.isRequired,
   handleClickLabel: PropTypes.func.isRequired,
   handleMouseEnterLabel: PropTypes.func.isRequired,
