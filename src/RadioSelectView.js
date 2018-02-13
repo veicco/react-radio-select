@@ -8,7 +8,6 @@ const styles = {
     oveflow: "hidden",
     clip: "rect(0 0 0 0)",
     height: 1,
-    width: 1,
     margin: -1,
     padding: 0,
     border: 0
@@ -69,18 +68,15 @@ const RadioSelectView = ({
            style={collapsed ? styles.visuallyHidden : styles.optionList}>
         {options.map((option, key) => (
           <div key={key}>
-            <span id={name + "Label" + key} style={styles.visuallyHidden}>{option.ariaLabel}</span>
-            <label htmlFor={name + key}
-                   onMouseDown={e => handleMouseDownLabel(e, key)}
-                   onClick={e => handleClickLabel(e, key)}
-                   onMouseEnter={e => handleMouseEnterLabel(e, key)}
-                   {...option.labelAttrs}>
-              <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}>
-                {option.component}
-              </div>
-            </label>
+            <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}
+                 onMouseDown={e => handleMouseDownLabel(e, key)}
+                 onClick={e => handleClickLabel(e, key)}
+                 onMouseEnter={e => handleMouseEnterLabel(e, key)}
+                 aria-hidden="true">
+              {option.component}
+            </div>
+            <label htmlFor={name + key}{...option.labelAttrs} style={styles.visuallyHidden}>{option.ariaLabel}</label>
             <input
-              aria-labelledby={name + "Label" + key}
               style={styles.visuallyHidden}
               ref={radio => inputRef(radio, key)}
               type="radio"
