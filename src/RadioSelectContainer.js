@@ -70,6 +70,7 @@ class RadioSelectContainer extends React.Component {
     if (!this.props.focused) this.focusInput(this.getState().selectedOption);
     this.selectOption(this.getState().selectedOption); // resets nextOption to allow blur again
     this.focusInput(this.getState().selectedOption);
+    this.toggle();
   }
 
   handleKeyDownInput(e) {
