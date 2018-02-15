@@ -36,12 +36,6 @@ class RadioSelectContainer extends React.Component {
     this.selectNextOption(index);
   }
 
-  handleClickLabel(e, index) {
-    this.focusInput(index);
-    this.selectOption(index);
-    this.collapse();
-  }
-
   handleBlurInput(e, index) {
     if (this.getState().nextOption === -1) {
       this.blur();
@@ -51,7 +45,7 @@ class RadioSelectContainer extends React.Component {
   }
 
   handleFocusInput(e, index) {
-    if (!this.props.focused) {
+    if (!this.getState().focused) {
       this.focus();
       this.expand();
       if (this.props.onFocus) this.props.onFocus(e);
@@ -111,6 +105,7 @@ class RadioSelectContainer extends React.Component {
 
   handleClickInput(e, index) {
     this.selectOption(index);
+    this.collapse();
   }
 
   handleMouseEnterLabel(e, index) {
@@ -149,7 +144,6 @@ class RadioSelectContainer extends React.Component {
                         options={options}
                         handleBlurInput={(e, key) => this.handleBlurInput(e, key)}
                         handleChangeInput={(e, key) => this.handleChangeInput(e, key)}
-                        handleClickLabel={(e, key) => this.handleClickLabel(e, key)}
                         handleClickValue={(e) => this.handleClickValue(e)}
                         handleFocusInput={(e, key) => this.handleFocusInput(e, key)}
                         handleKeyDownInput={(e) => this.handleKeyDownInput(e)}

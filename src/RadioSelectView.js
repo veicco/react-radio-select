@@ -48,7 +48,6 @@ const RadioSelectView = ({
                        handleFocusInput,
                        handleKeyDownInput,
                        handleMouseDownLabel,
-                       handleClickLabel,
                        handleMouseEnterLabel,
                        handleClickInput,
                        otherProps
@@ -69,30 +68,32 @@ const RadioSelectView = ({
            style={collapsed ? styles.visuallyHidden : styles.optionList}>
         {options.map((option, key) => (
           <div key={key}>
-            <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}
-                 onMouseDown={e => handleMouseDownLabel(e, key)}
-                 onClick={e => handleClickLabel(e, key)}
-                 onMouseEnter={e => handleMouseEnterLabel(e, key)}
-                 aria-hidden="true">
-              {option.component}
-            </div>
-            <label htmlFor={name + key}{...option.labelAttrs} style={styles.visuallyHidden}>{option.ariaLabel}</label>
-            <input
-              style={styles.visuallyHidden}
-              ref={radio => inputRef(radio, key)}
-              type="radio"
-              required={required}
-              checked={selectedOption === key}
-              name={name}
-              id={name + key}
-              value={option.value}
-              onBlur={e => handleBlurInput(e, key)}
-              onChange={e => handleChangeInput(e, key)}
-              onFocus={e => handleFocusInput(e, key)}
-              onKeyDown={e => handleKeyDownInput(e, key)}
-              onClick={e => handleClickInput(e, key)}
-              {...option.inputAttrs}
-            />
+            <span id={name + "label" + key} style={styles.visuallyHidden}>{option.ariaLabel}</span>
+            <label>
+              <div className={`option${highlightedOption === key ? ' highlight' : ''}${selectedOption === key ? ' selected' : ''}`}
+                   onMouseDown={e => handleMouseDownLabel(e, key)}
+                   onMouseEnter={e => handleMouseEnterLabel(e, key)}
+                   aria-hidden="true">
+                {option.component}
+              </div>
+              <input
+                aria-labelledby={name + "label" + key}
+                style={styles.visuallyHidden}
+                ref={radio => inputRef(radio, key)}
+                type="radio"
+                required={required}
+                checked={selectedOption === key}
+                name={name}
+                id={name + key}
+                value={option.value}
+                onBlur={e => handleBlurInput(e, key)}
+                onChange={e => handleChangeInput(e, key)}
+                onFocus={e => handleFocusInput(e, key)}
+                onKeyDown={e => handleKeyDownInput(e, key)}
+                onClick={e => handleClickInput(e, key)}
+                {...option.inputAttrs}
+              />
+            </label>
           </div>
         ))}
       </div>
@@ -126,7 +127,6 @@ RadioSelectView.propTypes = {
   handleKeyDownInput: PropTypes.func.isRequired,
   handleClickInput: PropTypes.func.isRequired,
   handleMouseDownLabel: PropTypes.func.isRequired,
-  handleClickLabel: PropTypes.func.isRequired,
   handleMouseEnterLabel: PropTypes.func.isRequired,
   otherProps: PropTypes.object
 };
